@@ -1,0 +1,82 @@
+
+//=================== To see all the endpoints exposed by authorization server ============================
+
+ =======      POST http://localhost:9000/.well-known/openid-configuration    =======
+
+and you will get a list of endpoints in json format as given below ::
+{
+  "issuer": "http://localhost:9000",
+  "authorization_endpoint": "http://localhost:9000/oauth2/authorize",
+  "device_authorization_endpoint": "http://localhost:9000/oauth2/device_authorization",
+  "token_endpoint": "http://localhost:9000/oauth2/token",
+  "token_endpoint_auth_methods_supported": [
+    "client_secret_basic",
+    "client_secret_post",
+    "client_secret_jwt",
+    "private_key_jwt"
+  ],
+  "jwks_uri": "http://localhost:9000/oauth2/jwks",
+  "userinfo_endpoint": "http://localhost:9000/userinfo",
+  "end_session_endpoint": "http://localhost:9000/connect/logout",
+  "response_types_supported": [
+    "code"
+  ],
+  "grant_types_supported": [
+    "authorization_code",
+    "client_credentials",
+    "refresh_token",
+    "urn:ietf:params:oauth:grant-type:device_code"
+  ],
+  "revocation_endpoint": "http://localhost:9000/oauth2/revoke",
+  "revocation_endpoint_auth_methods_supported": [
+    "client_secret_basic",
+    "client_secret_post",
+    "client_secret_jwt",
+    "private_key_jwt"
+  ],
+  "introspection_endpoint": "http://localhost:9000/oauth2/introspect",
+  "introspection_endpoint_auth_methods_supported": [
+    "client_secret_basic",
+    "client_secret_post",
+    "client_secret_jwt",
+    "private_key_jwt"
+  ],
+  "subject_types_supported": [
+    "public"
+  ],
+  "id_token_signing_alg_values_supported": [
+    "RS256"
+  ],
+  "scopes_supported": [
+    "openid"
+  ]
+}
+
+#1:) open insomnia
+
+--------- POST http://localhost:9000 and fill all the fields as given below ::
+AUTH TYPES : OAuth2
+Grant Type : authorization_code
+AUTHORIZATION URL : http://localhost:9000/oauth2/authorize
+ACCESS TOKEN URL : http://localhost:9000/oauth2/token
+CLIENT ID : client
+CLIENT SECRET : secret
+USE PKCE : UNCHECKED
+REDIRECT URI : https://oauthdebugger.com/debug
+open advanced options
+scope : read openid profile email address phone
+now Hit Fetch Tokens button and you will see sign in page and fill all the fields as given below ::
+
+username :: user // from UserDetailsService (user name)
+password :: password // from UserDetailsService (user password)
+
+and hit Sign in button
+
+and you will get access token which is given below ::
+
+REFRESH TOKEN : uJ3YqsqrpY0IooV-yi6sI1-aWh5lQ7PSOQuiZ5ndOC3tvDnRt2wvZKzudiTSvsnDSCPBy_cQlVnRqZsilRyg12NsGUeCACPvmqccwzchkTtEsB2yeMfpR1DJ65cLBV5M
+IDENTITY TOKEN : eyJraWQiOiI3YTAyOGE1OS1hYmUzLTRmY2MtODc3Ny03M2VmZDFhYzcxNzAiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiYXVkIjoiY2xpZW50IiwiYXpwIjoiY2xpZW50IiwiYXV0aF90aW1lIjoxNjg2MTc4MDc1LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjkwMDAiLCJleHAiOjE2ODYxNzk4NzUsImlhdCI6MTY4NjE3ODA3NSwic2lkIjoiMi1YcFQteHJPTW1wbjhWYUVNZk1wQ0k2Z01uTnFSbzlxWHhzMzZldVMtVSJ9.l__C_FV3WlkyNI8saQXhscK2Y6xBeyTtFz80h0eqKYgtC_ASyeiQuCho6gjAWfz8ja_L_9J1_os5VrNIM4L9Oh-c1Fo5FvFLI80JGY8OswgEncc-AvdB3vvlmE9s7y9wBiJmQf6PbGR1J-kmFcMgkLAnYGSXsV29xPlqQ9GYIGaamfP46gqaeeJK5TgEO-vNmIro0G9yP7QQp-6Ndcj6pSQlO2V8UqHZ0YCRTbsnfmL6qqPwCt8n5mCjVr_EwVD38OHi5686Wfar0zTSljnSnqyHELMAhobcyaB0OgrRK9fQPpLLLlydyE9REaYPa-i1bmOi2ZdRCBIJpV1lzSw8-Q
+ACCESS TOKEN : eyJraWQiOiI3YTAyOGE1OS1hYmUzLTRmY2MtODc3Ny03M2VmZDFhYzcxNzAiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiYXVkIjoiY2xpZW50IiwibmJmIjoxNjg2MTc4MDc1LCJzY29wZSI6WyJyZWFkIiwiYWRkcmVzcyIsInBob25lIiwib3BlbmlkIiwicHJvZmlsZSIsImVtYWlsIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTAwMCIsImV4cCI6MTY4NjE3ODM3NSwiaWF0IjoxNjg2MTc4MDc1fQ.YaNts--iX0c2YcUSqaGW-0AxvKYi8jrBhyb35Kq80ZOv7kt15rhKffL_DYHo_YDHlkghiJPSVdnRVl5Gveh7W75utyPCI1PWD3PODxyym_0EM9koWGV-1l9-tVIrpv2G4V2WTeKij4oYN0y2OQj6x6iXjscL9rauH12Ug6xspH7V6OoVVonlm-_hJT8HBZA_JG6L_4gg1USLyw1-8V3i9xBK0mHJveSuXJa8iZckzVgR6Kr0bMOuRpqY22XcMyLgty4-mCmJOTE0Nh609zGbV10IMYVAhm2RBJqLu2wkFI0GOURqC-TlSnlP4bM2lKyasd0V7e5G87Gz-TD7Bd2jiA
+
+
+
